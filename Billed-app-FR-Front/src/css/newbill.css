@@ -61,3 +61,9 @@ textarea:focus, input:focus, select:focus {
 *[placeholder] {
   color: #0E5AE5 !important;
 }
+
+.error::after{
+  content: 'Seuls les fichiers suivants sont acceptés : jpg, jpeg, png';
+  display: block;
+  color: red;
+}
