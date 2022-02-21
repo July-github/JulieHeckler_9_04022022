@@ -36,4 +36,20 @@ describe("Given I am connected as an employee", () => {
       expect(dates).toEqual(datesSorted)
     })
   })
+
+  /*describe("When I am on Bills Page and I click on a button icon-eye", () => {
+    test("the function handleClickIconEye(icon-eye) is called", () => {
+      const eyebutton = screen.getByTestId("icon-eye")
+      eyebutton.addEventListener("click", handleClickIconEye(eyebutton));
+      userEvent.click(eyebutton);
+      expect(handleClickIconEye(eyebutton)).toHaveBeenCalled();
+    })
+
+    test("the corresponding Bill is shown", () => {
+
+
+    })
+  })*/
+
+  
 })

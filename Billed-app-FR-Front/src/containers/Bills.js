@@ -35,9 +35,7 @@ export default class {
       .then(snapshot => {
         console.log(snapshot)
         snapshot.sort(function(a,b) { 
-        const c = new Date (a.date);
-        const d = new Date (b.date);
-        return (c > d) ? -1 : (c < d) ? 1 : 0;
+        return ((a.date < b.date) ? 1 : -1)
         })
         const bills = snapshot
           .map(doc => {
