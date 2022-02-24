@@ -37,7 +37,6 @@ describe("Given I am connected as an employee", () => {
       const handleChangeFile = jest.fn()
       file.addEventListener("click", handleChangeFile)
       userEvent.click(file);
-
       expect(handleChangeFile).toHaveBeenCalled()
     })
   })
@@ -70,60 +69,12 @@ describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page and I click on submit button", () => {
     test("Then the function handleSubmit is called and it should render Bills page", async () => {
       document.body.innerHTML = NewBillUI()
-      const inputNewBill ={
-        email: "jane@doe.com",
-        type: "Transport",
-        name:  "Vol",
-        amount: "340",
-        date:  "01/01/1970",
-        vat: "70",
-        pct: "20",
-        commentary: "great",
-        fileUrl: "https://test.storage.tld/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=c1640e12-a24b-4b11-ae52-529112e9602a",
-        fileName: "preview-facture-free-201801-pdf-1.jpg",
-        status: 'pending'
-      }
-
-      const inputType = screen.getByTestId("expense-type")
-      fireEvent.change(inputType, { target: { value: inputNewBill.type } });
-      expect(inputType.value).toBe(inputNewBill.type);
-
-      const inputName = screen.getByTestId("expense-name")
-      fireEvent.change(inputName, { target: { value: inputNewBill.name } });
-      const inputAmount = screen.getByTestId("amount")
-      fireEvent.change(inputAmount, { target: { value: inputNewBill.amount } });
-      const inputDate = screen.getByTestId("datepicker")
-      fireEvent.change(inputDate, { target: { value: inputNewBill.date } });
-      const inputVat = screen.getByTestId("vat")
-      fireEvent.change(inputVat, { target: { value: inputNewBill.vat } });
-      const inputPct = screen.getByTestId("pct")
-      fireEvent.change(inputPct, { target: { value: inputNewBill.pct } });
-      const inputComment = screen.getByTestId("commentary")
-      fireEvent.change(inputComment, { target: { value: inputNewBill.commentary } });
-      const inputFileName = screen.getByTestId("file")
-      fireEvent.change(inputFileName, { target: { value: inputNewBill.fileName } });
-
-
-
-      Object.defineProperty(window, 'localStorage', { value: {
-        getItem: jest.fn(() => null),
-        setItem: jest.fn(() => null),
-      },
-      writable: true,
-      })
-      const store = null
-      const onNavigate = (pathname) => {
-        document.body.innerHTML = ROUTES({ pathname })
-      }
-      const newBillBoard = new NewBill({
-        document, onNavigate, store, localStorage
-      })
 
       const form = screen.getByText("Envoyer")
-      const handleSubmit = jest.fn(newBillBoard.handleSubmit)
-      const event = new Event('click', { target:{ preventDefault: () => {}}});
+      const handleSubmit = jest.fn()
+      const event = jest.fn()((e) => e.preventDefault);
       form.addEventListener("click", handleSubmit(event))
-      userEvent.click(form);
+      fireEvent.submit(form);
       expect(handleSubmit).toHaveBeenCalled()
 
       const pathname = ROUTES_PATH['Bills']
