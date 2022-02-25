@@ -2,7 +2,8 @@
  * @jest-environment jsdom
  */
 
-import { screen, waitFor, fireEvent } from "@testing-library/dom"
+import { screen, waitFor, fireEvent } from "@testing-library/dom";
+import "@testing-library/jest-dom/extend-expect"
 import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
 import userEvent from "@testing-library/user-event"
@@ -28,6 +29,28 @@ describe("Given I am connected as an employee", () => {
       expect(screen.getByText("Justificatif")).toBeTruthy()
       expect(screen.getByText("Envoyer")).toBeTruthy()
     })
+
+    test("Then the field 'Type de dépense' should be required", () => {
+      const expense = screen.getByTestId("expense-type")
+      expect(expense).toBeRequired()
+    })
+    test("Then the field 'Date' should be required", () => {
+      const datepicker = screen.getByTestId("datepicker")
+      expect(datepicker).toBeRequired()
+    })
+    test("Then the field 'Montant' should be required", () => {
+      const amount = screen.getByTestId("amount")
+      expect(amount).toBeRequired()
+    })
+    test("Then the field 'PCT' should be required", () => {
+      const pct = screen.getByTestId("pct")
+      expect(pct).toBeRequired()
+    })
+    test("Then the field 'Justificatif' should be required", () => {
+      const file = screen.getByTestId("file")
+      expect(file).toBeRequired()
+    })
+
   })
 
   describe("When I am on NewBill Page and I click on button 'Choisir un fichier' ", () => {
