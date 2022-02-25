@@ -8,15 +8,17 @@ import NewBill from "../containers/NewBill.js"
 import userEvent from "@testing-library/user-event"
 import {localStorageMock} from "../__mocks__/localStorage.js";
 import { ROUTES, ROUTES_PATH} from "../constants/routes.js";
-import mockStore from "../__mocks__/store.js";
-import { newBill } from "../fixtures/newBill.js"
 
 
 describe("Given I am connected as an employee", () => {
+
+  beforeEach(() => {
+    document.body.innerHTML = NewBillUI()
+  })
+
   describe("When I am on NewBill Page", () => {
     test("Then it should shown all the inputs of the form and the button 'Envoyer'", () => {
-      const html = NewBillUI()
-      document.body.innerHTML = html
+
       expect(screen.getByText("Type de dépense")).toBeTruthy()
       expect(screen.getByText("Nom de la dépense")).toBeTruthy()
       expect(screen.getByText("Date")).toBeTruthy()
@@ -30,21 +32,50 @@ describe("Given I am connected as an employee", () => {
 
   describe("When I am on NewBill Page and I click on button 'Choisir un fichier' ", () => {
     test("Then the function handleChangeFile is called", () => {
-      const html = NewBillUI()
-      document.body.innerHTML = html
 
       const file = screen.getByTestId("file")
       const handleChangeFile = jest.fn()
       file.addEventListener("click", handleChangeFile)
       userEvent.click(file);
+      
       expect(handleChangeFile).toHaveBeenCalled()
+    })
+  })
+
+  describe("When I load a file with the correct extension", () => {
+    test("Then the field 'file' should equal to the file name",  () => {
+      Object.defineProperty(window, 'localStorage', {value: localStorageMock})
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+
+      const handleChangeFile = jest.fn()
+
+      const file = screen.getByTestId("file")
+      file.addEventListener("click", handleChangeFile)
+      fireEvent.change(file, {
+        target: { files: [new File(["justificatif"], "test.jpeg", {type: "image/jpeg"})] }
+      })
+      expect(file.files[0].name).toBe("test.jpeg")
+    })
+  })
+      
+  describe("When I load a file with the wrong extension", () => {
+    test("Then the field 'file' should be empty and an error message appears", () => {
+  
+      const file = screen.getByTestId("file")
+      fireEvent.change(file, {
+        target: { files: [new File(["justificatif"], "test.pdf", {type: "document/pdf"})] }
+      })
+      //const errorLabel = screen.getByClass("bold-label")
+      //console.log(errorLabel)
+      expect(file.value).toBe("")
+      //expect(errorLabel.className).toContain("error")
     })
   })
 
   describe("When I am on NewBill Page and I do not fill the required fields", () => {
     test("Then I should stay on the NewBill page", () => {
-      const html = NewBillUI()
-      document.body.innerHTML = html
 
       const inputDate = screen.getByTestId("datepicker")
       inputDate.value = null
@@ -67,15 +98,27 @@ describe("Given I am connected as an employee", () => {
   })
 
   describe("When I am on NewBill Page and I click on submit button", () => {
-    test("Then the function handleSubmit is called and it should render Bills page", async () => {
-      document.body.innerHTML = NewBillUI()
+    test("Then the function handleSubmit should be called", async () => {
 
-      const form = screen.getByText("Envoyer")
-      const handleSubmit = jest.fn()
-      const event = jest.fn()((e) => e.preventDefault);
-      form.addEventListener("click", handleSubmit(event))
+      const store = null
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+      const newBillBoard = new NewBill({document, onNavigate, store, localStorage})
+
+      const form = screen.getByTestId("form-new-bill")
+      const handleSubmit = jest.fn(newBillBoard.handleSubmit)
+      const updatedBill = jest.fn(newBillBoard.updateBill)
+
+      form.addEventListener("submit", handleSubmit)
+      form.addEventListener("submit", updatedBill)
       fireEvent.submit(form);
+
       expect(handleSubmit).toHaveBeenCalled()
+      expect(updatedBill).toHaveBeenCalled()
+    })
+
+      test("Then it should render Bills page", async () => {
 
       const pathname = ROUTES_PATH['Bills']
       const data = []
@@ -88,6 +131,7 @@ describe("Given I am connected as an employee", () => {
         loading,
        })
        await waitFor(() => screen.getAllByText('Mes notes de frais'))
+
        expect(screen.getAllByText('Mes notes de frais')).toBeTruthy();
     })
   })
