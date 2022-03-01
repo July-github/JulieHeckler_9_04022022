@@ -24,36 +24,35 @@ export default class NewBill {
     const email = JSON.parse(localStorage.getItem("user")).email
     const fileLabel = this.document.querySelector(`label[for="file"]`)
     
-    if((file.type === "image/jpg") || (file.type === "image/jpeg") || (file.type === "image/png")){
+    if(file && ((file.type === "image/jpg") || (file.type === "image/jpeg") || (file.type === "image/png"))){
       fileLabel.classList.remove("error")
-
-      formData.append('file', file)
-      formData.append('email', email)
-
-      this.store
-        .bills()
-        .create({
-          data: formData,
-          headers: {
-            noContentType: true
-          }
-        })
-        .then(({fileUrl, key}) => {
-          console.log(fileUrl)
-          this.billId = key
-          this.fileUrl = fileUrl
-          this.fileName = fileName
-        })
-        .catch(error => console.error(error))
-
     }else{
       fileLabel.classList.add("error")
       e.target.value = ""
     }
+
+      formData.append('file', file)
+      formData.append('email', email)
+
+    this.store
+      .bills()
+      .create({
+        data: formData,
+        headers: {
+          noContentType: true
+        }
+      })
+      .then(({fileUrl, key}) => {
+        console.log(fileUrl)
+        this.billId = key
+        this.fileUrl = fileUrl
+        this.fileName = fileName
+      })
+      .catch(error => console.error(error))
   }
   handleSubmit = e => {
     e.preventDefault()
-    //console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
+    console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,
