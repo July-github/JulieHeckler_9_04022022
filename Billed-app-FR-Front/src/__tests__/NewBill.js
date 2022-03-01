@@ -199,18 +199,17 @@ describe("Given I am a user connected as Employee", () => {
         key:"1234"
       }]      
 
-      mockStore.bills.mockImplementation((dataNewBill) => {
+      const resolved = mockStore.bills.mockImplementation((dataNewBill) => {
         return {
           create : (dataNewBill) =>  {
             return Promise.resolve({fileUrl: 'justificatif.jpeg', key:"1234"})
           }
         }})
-      console.log(resolved)
       expect(resolved.fileUrl).toBe('justificatif.jpeg')
     })
 
     test("Then create new bill to an API and fails with 404 message error", async () => {
-      mockStore.bills.mockImplementation(() => {
+      mockStore.bills.mockImplementationOnce(() => {
         return {
           create : (dataNewBill) =>  {
             return Promise.reject(new Error("Erreur 404"))
@@ -223,7 +222,7 @@ describe("Given I am a user connected as Employee", () => {
     })
     
     test("Then create new bill to an API and fails with 500 message error", async () => {
-      mockStore.bills.mockImplementation(() => {
+      mockStore.bills.mockImplementationOnce(() => {
         return {
           create : (dataNewBill) =>  {
             return Promise.reject(new Error("Erreur 500"))
