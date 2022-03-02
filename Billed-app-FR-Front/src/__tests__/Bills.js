@@ -84,8 +84,8 @@ describe("Given I am connected as an employee", () => {
       userEvent.click(eyebutton);
       expect(handleClickIconEye).toHaveBeenCalled();
 
-      const modal = screen.getByTestId('modaleFile')
-      expect(modal).toBeTruthy()
+      const modaleFile = screen.getByTestId('modaleFile')
+      expect(modaleFile).toBeTruthy()
     })
   })
 

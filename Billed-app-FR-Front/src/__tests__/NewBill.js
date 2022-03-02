@@ -75,9 +75,20 @@ describe("Given I am connected as an employee", () => {
   })
 
   describe("When I load a file with the correct extension", () => {
-    test("Then the field 'file' should equal to the file name",  () => {
-
-      const handleChangeFile = jest.fn()
+    test("Then the value of field 'file' should equal to the file name",  () => {
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+      const store = mockStore    
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'user'
+      }))
+      const NewBillBoard = new NewBill({
+        document, onNavigate, store, localStorage
+      })
+      
+      const handleChangeFile = jest.fn(NewBillBoard.handleChangeFile)
 
       const file = screen.getByTestId("file")
       file.addEventListener("click", handleChangeFile)
@@ -89,16 +100,14 @@ describe("Given I am connected as an employee", () => {
   })
       
   describe("When I load a file with the wrong extension", () => {
-    test("Then the field 'file' should be empty and an error message appears", () => {
-  
+    test("Then the field 'file' should be empty", async () => {
       const file = screen.getByTestId("file")
+
       fireEvent.change(file, {
         target: { files: [new File(["justificatif"], "test.pdf", {type: "document/pdf"})] }
       })
-      //const errorLabel = screen.getByLabelText("file")
-      //console.log(errorLabel)
+
       expect(file.value).toBe("")
-      //expect(errorLabel).toHaveClassName("error")
     })
   })
 
@@ -199,18 +208,6 @@ describe("Given I am a user connected as Employee", () => {
     })
   })
   describe("When an error occurs on API", () => {
-    /*beforeEach(() => {
-      Object.defineProperty(window, 'localStorage', {value: localStorageMock})
-      window.localStorage.setItem('user', JSON.stringify({
-        type: 'Employee',
-      }))
-
-      const root = document.createElement("div")
-      root.setAttribute("id", "root")
-      document.body.appendChild(root)
-      router()
-    })*/
-
     test("Then it fails with 404 message error", async () => {
     const billPosted = mockStore.bills.mockImplementationOnce(() => {
       return {
@@ -228,7 +225,7 @@ describe("Given I am a user connected as Employee", () => {
     })
     
     test("Then create new bill to an API and fails with 500 message error", async () => {
-      mockStore.bills.mockImplementationOnce(() => {
+      const billPosted = mockStore.bills.mockImplementationOnce(() => {
         return {
           create : () =>  {
             return Promise.reject(new Error("Erreur 500"))

@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.62% </span>
+                <span class="strong">48.84% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>20/42</span>
+                <span class='fraction'>21/43</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">30% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/9</span>
+                <span class='fraction'>3/10</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.62% </span>
+                <span class="strong">48.84% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>20/42</span>
+                <span class='fraction'>21/43</span>
             </div>
         
             
@@ -142,25 +142,24 @@
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -175,6 +174,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -191,14 +194,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -218,7 +216,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -255,36 +253,35 @@ export default class NewBill {
     const email = <span class="cstat-no" title="statement not covered" >JSON.parse(localStorage.getItem("user")).email</span>
     const fileLabel = <span class="cstat-no" title="statement not covered" >this.document.querySelector(`label[for="file"]`)</span>
     
-<span class="cstat-no" title="statement not covered" >    if((file.type === "image/jpg") || (file.type === "image/jpeg") || (file.type === "image/png")){</span>
+<span class="cstat-no" title="statement not covered" >    if(file &amp;&amp; ((file.type === "image/jpg") || (file.type === "image/jpeg") || (file.type === "image/png"))){</span>
 <span class="cstat-no" title="statement not covered" >      fileLabel.classList.remove("error")</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      formData.append('file', file)</span>
-<span class="cstat-no" title="statement not covered" >      formData.append('email', email)</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >      this.store</span>
-        .bills()
-        .create({
-          data: formData,
-          headers: {
-            noContentType: true
-          }
-        })
-        .then(<span class="fstat-no" title="function not covered" >({</span>fileUrl, key}) =&gt; {
-<span class="cstat-no" title="statement not covered" >          console.log(fileUrl)</span>
-<span class="cstat-no" title="statement not covered" >          this.billId = key</span>
-<span class="cstat-no" title="statement not covered" >          this.fileUrl = fileUrl</span>
-<span class="cstat-no" title="statement not covered" >          this.fileName = fileName</span>
-        })
-        .catch(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >console.error(error))</span>
-&nbsp;
     }else{
 <span class="cstat-no" title="statement not covered" >      fileLabel.classList.add("error")</span>
 <span class="cstat-no" title="statement not covered" >      e.target.value = ""</span>
     }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      formData.append('file', file)</span>
+<span class="cstat-no" title="statement not covered" >      formData.append('email', email)</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    this.store</span>
+      .bills()
+      .create({
+        data: formData,
+        headers: {
+          noContentType: true
+        }
+      })
+      .then(<span class="fstat-no" title="function not covered" >({</span>fileUrl, key}) =&gt; {
+<span class="cstat-no" title="statement not covered" >        console.log(fileUrl)</span>
+<span class="cstat-no" title="statement not covered" >        this.billId = key</span>
+<span class="cstat-no" title="statement not covered" >        this.fileUrl = fileUrl</span>
+<span class="cstat-no" title="statement not covered" >        this.fileName = fileName</span>
+      })
+      .catch(<span class="fstat-no" title="function not covered" >er</span>ror =&gt; <span class="cstat-no" title="statement not covered" >console.error(error))</span>
   }
   handleSubmit = e =&gt; {
     e.preventDefault()
-    //console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
+    console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,
@@ -322,7 +319,7 @@ export default class NewBill {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Mar 01 2022 09:27:20 GMT+0100 (heure normale d’Europe centrale)
+                at Wed Mar 02 2022 12:36:48 GMT+0100 (heure normale d’Europe centrale)
             </div>
         </div>
         <script src="../prettify.js"></script>
