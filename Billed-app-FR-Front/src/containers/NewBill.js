@@ -26,10 +26,6 @@ export default class NewBill {
     
     if(file && ((file.type === "image/jpg") || (file.type === "image/jpeg") || (file.type === "image/png"))){
       fileLabel.classList.remove("error")
-    }else{
-      fileLabel.classList.add("error")
-      e.target.value = ""
-    }
 
       formData.append('file', file)
       formData.append('email', email)
@@ -49,6 +45,12 @@ export default class NewBill {
         this.fileName = fileName
       })
       .catch(error => console.error(error))
+
+    }else{
+      fileLabel.classList.add("error")
+      e.target.value = ""
+    }
+
   }
   handleSubmit = e => {
     e.preventDefault()

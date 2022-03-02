@@ -30,19 +30,24 @@ describe("Given I am connected as an employee", () => {
       window.onNavigate(ROUTES_PATH.Bills)
       await waitFor(() => screen.getByTestId('icon-window'))
       const windowIcon = screen.getByTestId('icon-window')
+
       //to-do write expect expression
       expect(windowIcon).toHaveClass('active-icon')
     })
+
     test("Then the bills are listed", () => {
       document.body.innerHTML = BillsUI({ data: bills })
       const trList = document.querySelectorAll("tr")
+      
       expect (trList.length).not.toBeNull()
     })
+
     test("Then bills should be ordered from earliest to latest", () => {
       document.body.innerHTML = BillsUI({ data: bills })
       const dates = screen.getAllByText(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i).map(a => a.innerHTML)
       const antiChrono = (a, b) => ((a < b) ? 1 :  -1 )
       const datesSorted = [...dates].sort(antiChrono)
+      
       expect(dates).toEqual(datesSorted)
     })
   })
@@ -50,6 +55,7 @@ describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page and it is loading", () => {
     test("Then Loading page should be rendered", () => {
       document.body.innerHTML = BillsUI({ loading: true })
+
       expect(screen.getAllByText('Loading...')).toBeTruthy()
     })
   })
@@ -57,7 +63,31 @@ describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page and back-end sends an error", () => {
     test("Then, Error page should be rendered", () => {
       document.body.innerHTML = BillsUI({ error: 'error' })
+
       expect(screen.getAllByText('Erreur')).toBeTruthy()
+    })
+  })
+
+  describe("When I am on Bills Page and data is corrupted", () => {
+    test("Then the error is logged & the function getBills returns an unformatted date", () => {
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'Employee'
+      }))
+      const root = document.createElement("div")
+      root.setAttribute("id", "root")
+      document.body.append(root)
+      router()
+      window.onNavigate(ROUTES_PATH.Bills)
+      const getBills = jest.fn({data : {}})
+
+      try{
+        getBills
+      }catch(e){
+        expect(console.log).toBe(e, 'for')
+        expect(data.date).toBe("1970/01/01")
+        expect(data.status).toBe("undefined")
+      }
     })
   })
 

@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { screen, waitFor, fireEvent } from "@testing-library/dom";
+import { screen, waitFor, fireEvent, getByText } from "@testing-library/dom";
 import "@testing-library/jest-dom/extend-expect"
 import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
@@ -75,19 +75,22 @@ describe("Given I am connected as an employee", () => {
   })
 
   describe("When I load a file with the correct extension", () => {
+    beforeEach(()=>{
+      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+      window.localStorage.setItem('user', JSON.stringify({
+        type: 'user'
+      }))
+    })
+
     test("Then the value of field 'file' should equal to the file name",  () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
       const store = mockStore    
-      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-      window.localStorage.setItem('user', JSON.stringify({
-        type: 'user'
-      }))
+
       const NewBillBoard = new NewBill({
         document, onNavigate, store, localStorage
       })
-      
       const handleChangeFile = jest.fn(NewBillBoard.handleChangeFile)
 
       const file = screen.getByTestId("file")
@@ -95,6 +98,7 @@ describe("Given I am connected as an employee", () => {
       fireEvent.change(file, {
         target: { files: [new File(["justificatif"], "test.jpeg", {type: "image/jpeg"})] }
       })
+
       expect(file.files[0].name).toBe("test.jpeg")
     })
   })
@@ -102,12 +106,29 @@ describe("Given I am connected as an employee", () => {
   describe("When I load a file with the wrong extension", () => {
     test("Then the field 'file' should be empty", async () => {
       const file = screen.getByTestId("file")
+      const fileLabel = document.querySelector('label[for="file"]')
+
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+      const store = mockStore    
+
+      const NewBillBoard = new NewBill({
+        document, onNavigate, store, localStorage
+      })
+      const handleChangeFile = jest.fn(() => {
+        NewBillBoard.handleChangeFile
+        return fileLabel
+      })
+
+      file.addEventListener("click", handleChangeFile)
 
       fireEvent.change(file, {
         target: { files: [new File(["justificatif"], "test.pdf", {type: "document/pdf"})] }
       })
 
       expect(file.value).toBe("")
+      expect(fileLabel).toHaveClass('error')
     })
   })
 
