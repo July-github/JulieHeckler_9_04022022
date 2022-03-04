@@ -112,6 +112,7 @@ describe("Given I am connected as an employee", () => {
       const handleClickIconEye = jest.fn(billsList.handleClickIconEye(eyebutton))
       eyebutton.addEventListener("click", handleClickIconEye)
       userEvent.click(eyebutton);
+
       expect(handleClickIconEye).toHaveBeenCalled();
 
       const modaleFile = screen.getByTestId('modaleFile')
@@ -121,7 +122,7 @@ describe("Given I am connected as an employee", () => {
 
   describe('When I am on Bills Page and I click on button btn-new-bill', () => {
     afterEach(() => {
-      document.body.innerHTML = BillsUI({data:bills})
+      document.body.innerHTML = BillsUI({ data:bills })
     })
     test('Then the function handleClickNewBill is called and it should render NewBill page', async () => {
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
@@ -141,6 +142,7 @@ describe("Given I am connected as an employee", () => {
       const newBillButton = screen.getByTestId("btn-new-bill")
       newBillButton.addEventListener ("click", handleClickNewBill)
       userEvent.click(newBillButton);
+
       expect(handleClickNewBill).toHaveBeenCalled();
 
       const pathname = ROUTES_PATH.NewBill
@@ -155,6 +157,7 @@ describe("Given I am connected as an employee", () => {
        })
        document.body.innerHTML = html
        await waitFor(() => screen.getAllByText('Envoyer une note de frais'))
+
        expect(screen.getAllByText('Envoyer une note de frais')).toBeTruthy();
     })
   })
@@ -172,11 +175,15 @@ describe("Given I am a user connected as Employee", () => {
       root.setAttribute("id", "root")
       document.body.append(root)
       router()
+      const spy = jest.spyOn(mockStore, "bills")
 
       const billsHeader = await screen.getByText("Mes notes de frais")
       const newBillButton  = await screen.getByText("Nouvelle note de frais")
       const trList = document.querySelectorAll("tr")
 
+      mockStore.bills().list()
+
+      expect(spy).toHaveBeenCalled()
       expect(billsHeader).toBeTruthy()
       expect(newBillButton).toBeTruthy()
       expect (trList.length).not.toBeNull()
@@ -200,7 +207,6 @@ describe("Given I am a user connected as Employee", () => {
       router()
     })
     
-
     test("fetches bills from an API and fails with 404 message error", async () => {
       mockStore.bills.mockImplementationOnce(() => {
         return {
