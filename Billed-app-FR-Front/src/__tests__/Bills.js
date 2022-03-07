@@ -79,15 +79,20 @@ describe("Given I am connected as an employee", () => {
       document.body.append(root)
       router()
       window.onNavigate(ROUTES_PATH.Bills)
-      const getBills = jest.fn({data : {}})
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }
+      const store = null
+      const billsList = new Bills({
+        document, onNavigate, store, localStorage: window.localStorage})
 
-      try{
-        getBills
-      }catch(e){
-        expect(console.log).toBe(e, 'for')
+      const getBills = billsList.getBills({})
+      getBills.bills().list().then(()=>{
+        
+        expect(console.log).toHaveBeenCalledWith(e, 'for', data)
         expect(data.date).toBe("1970/01/01")
         expect(data.status).toBe("undefined")
-      }
+      })
     })
   })
 
@@ -124,6 +129,7 @@ describe("Given I am connected as an employee", () => {
     afterEach(() => {
       document.body.innerHTML = BillsUI({ data:bills })
     })
+
     test('Then the function handleClickNewBill is called and it should render NewBill page', async () => {
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       window.localStorage.setItem('user', JSON.stringify({
@@ -161,7 +167,6 @@ describe("Given I am connected as an employee", () => {
        expect(screen.getAllByText('Envoyer une note de frais')).toBeTruthy();
     })
   })
-
 })
 
 // test d'intégration GET
@@ -178,17 +183,16 @@ describe("Given I am a user connected as Employee", () => {
       const spy = jest.spyOn(mockStore, "bills")
 
       const billsHeader = await screen.getByText("Mes notes de frais")
-      const newBillButton  = await screen.getByText("Nouvelle note de frais")
       const trList = document.querySelectorAll("tr")
 
       mockStore.bills().list()
 
       expect(spy).toHaveBeenCalled()
       expect(billsHeader).toBeTruthy()
-      expect(newBillButton).toBeTruthy()
       expect (trList.length).not.toBeNull()
     })
   })
+
   describe("When an error occurs on API", () => {
     beforeEach(() => {
       jest.spyOn(mockStore, "bills")
@@ -219,6 +223,7 @@ describe("Given I am a user connected as Employee", () => {
       const message = await screen.getByText(/Erreur 404/)
       expect(message).toBeTruthy()
     })
+
     test("fetches messages from an API and fails with 500 message error", async () => {
       mockStore.bills.mockImplementationOnce(() => {
         return {
