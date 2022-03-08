@@ -234,55 +234,37 @@ describe("Given I am a user connected as Employee", () => {
       mockStore.bills().create(billdata)
       
       expect(spy).toHaveBeenCalledTimes(1)
-
     })
   })
   describe("When an error occurs on API", () => {
 
-    test("Then it fails with 404 message error", async () => {
-      //document.body.innerHTML = NewBillUI()
-      const billdata={
-        status: "pending",
-        pct: 20,
-        amount: 200,
-        email: "jane@doe",
-        name: "holidays",
-        vat: "40",
-        fileName: "justificatif.jpg",
-        date: "2002-02-02",
-        commentary: "holidays",
-        type: "Restaurants et bars",
-        fileUrl: "justificatif.jpg"
-      }
-      
+    test("Then it fails with 404 message error", async () => {      
       jest.spyOn(mockStore, "bills")
-      mockStore.bills.mockImplementationOnce(() => {
+      const rejected = mockStore.bills.mockImplementationOnce(() => {
         return {
           create: () => {return Promise.reject(new Error("Erreur 404"))}
         }
       })
 
       window.onNavigate(ROUTES_PATH.NewBill)
-      await mockStore.bills().create(billdata)
-      //await new Promise(process.nextTick);
-      const message = await screen.getByText(/Erreur 404/)
+      await new Promise(process.nextTick);
 
-      expect(message).toBeTruthy()
+      return expect(rejected().create).rejects.toEqual(new Error("Erreur 404"))
 
     })
     
     test("Then create new bill to an API and fails with 500 message error", async () => {
-      mockStore.bills.mockImplementationOnce(() => {
+      jest.spyOn(mockStore, "bills")
+      const rejected = mockStore.bills.mockImplementationOnce(() => {
         return {
-          create : () =>  {
-            return Promise.reject(new Error("Erreur 500"))
-          }
-        }})
+          create: () => {return Promise.reject(new Error("Erreur 500"))}
+        }
+      })
+
       window.onNavigate(ROUTES_PATH.NewBill)
       await new Promise(process.nextTick);
-      const message = await screen.getByText(/Erreur 500/)
 
-      expect(message).toBeTruthy()
+      return expect(rejected().create).rejects.toEqual(new Error("Erreur 500"))
 
     })
   })
