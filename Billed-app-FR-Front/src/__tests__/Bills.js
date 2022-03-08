@@ -68,34 +68,6 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
-  describe("When I am on Bills Page and data is corrupted", () => {
-    test("Then the error is logged & the function getBills returns an unformatted date", () => {
-      Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-      window.localStorage.setItem('user', JSON.stringify({
-        type: 'Employee'
-      }))
-      const root = document.createElement("div")
-      root.setAttribute("id", "root")
-      document.body.append(root)
-      router()
-      window.onNavigate(ROUTES_PATH.Bills)
-      const onNavigate = (pathname) => {
-        document.body.innerHTML = ROUTES({ pathname })
-      }
-      const store = null
-      const billsList = new Bills({
-        document, onNavigate, store, localStorage: window.localStorage})
-
-      const getBills = billsList.getBills({})
-      getBills.bills().list().then(()=>{
-        
-        expect(console.log).toHaveBeenCalledWith(e, 'for', data)
-        expect(data.date).toBe("1970/01/01")
-        expect(data.status).toBe("undefined")
-      })
-    })
-  })
-
   describe("When I am on Bills Page and I click on a button icon-eye", () => {
     test("Then the function handleClickIconEye(icon-eye) is called", () => {
     

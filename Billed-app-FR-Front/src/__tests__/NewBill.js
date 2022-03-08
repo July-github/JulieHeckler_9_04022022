@@ -10,6 +10,8 @@ import userEvent from "@testing-library/user-event"
 import {localStorageMock} from "../__mocks__/localStorage.js";
 import { ROUTES, ROUTES_PATH} from "../constants/routes.js";
 import mockStore from "../__mocks__/store.js";
+import router from "../app/Router.js";
+
 
 jest.mock('../app/store.js', () => mockStore)
 
@@ -195,10 +197,26 @@ describe("Given I am connected as an employee", () => {
 // test d'intégration POST
 
 describe("Given I am a user connected as Employee", () => {
-  describe("When I navigate to NewBill page", () => {
+  beforeEach(() => {
+    Object.defineProperty(
+        window,
+        'localStorage',
+        { value: localStorageMock }
+    )
 
+    window.localStorage.setItem('user', JSON.stringify({
+      type: 'Employee',
+      email: "jane@doe"
+    }))
+    const root = document.createElement("div")
+    root.setAttribute("id", "root")
+    document.body.appendChild(root)
+    router()
+
+  })
+
+  describe("When I navigate to NewBill page", () => {
     test("Then create new bill to mock API POST", async () => {
-      document.body.innerHTML = NewBillUI()
       const spy = jest.spyOn(mockStore, "bills")
       const billdata={
         status: "pending",
@@ -216,43 +234,55 @@ describe("Given I am a user connected as Employee", () => {
       mockStore.bills().create(billdata)
       
       expect(spy).toHaveBeenCalledTimes(1)
+
     })
   })
   describe("When an error occurs on API", () => {
+
     test("Then it fails with 404 message error", async () => {
-      const billPosted = mockStore.bills.mockImplementationOnce(() => {
+      document.body.innerHTML = NewBillUI()
+      const billdata={
+        status: "pending",
+        pct: 20,
+        amount: 200,
+        email: "jane@doe",
+        name: "holidays",
+        vat: "40",
+        fileName: "justificatif.jpg",
+        date: "2002-02-02",
+        commentary: "holidays",
+        type: "Restaurants et bars",
+        fileUrl: "justificatif.jpg"
+      }
+      jest.spyOn(mockStore, "bills")
+      mockStore.bills.mockImplementationOnce(() => {
         return {
           create: () => {return Promise.reject(new Error("Erreur 404"))}
         }
       })
 
-      const rejected = await billPosted()
-      
-      expect(rejected.create).rejects.toEqual(new Error("Erreur 404"))
+      mockStore.bills().create(billdata)
+      window.onNavigate(ROUTES_PATH.NewBill)
+      await new Promise(process.nextTick);
+      const message = await screen.getByText(/Erreur 404/)
 
-      /*try{
-        rejected
-      }catch(e){
-        expect(e.message).toBe("Erreur 404")
-      }*/
+      expect(message).toBeTruthy()
+
     })
     
     test("Then create new bill to an API and fails with 500 message error", async () => {
-      const billPosted = mockStore.bills.mockImplementationOnce(() => {
+      mockStore.bills.mockImplementationOnce(() => {
         return {
           create : () =>  {
             return Promise.reject(new Error("Erreur 500"))
           }
         }})
-        const rejected = await billPosted()
+      window.onNavigate(ROUTES_PATH.NewBill)
+      await new Promise(process.nextTick);
+      const message = await screen.getByText(/Erreur 500/)
 
-        expect(rejected.create).rejects.toEqual(new Error("Erreur 500"))
+      expect(message).toBeTruthy()
 
-        /*try{
-          rejected
-        }catch(e){
-          expect(e.message).toBe("Erreur 500")
-        }*/
       })
   })
 })
