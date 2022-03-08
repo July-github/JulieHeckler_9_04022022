@@ -240,7 +240,7 @@ describe("Given I am a user connected as Employee", () => {
   describe("When an error occurs on API", () => {
 
     test("Then it fails with 404 message error", async () => {
-      document.body.innerHTML = NewBillUI()
+      //document.body.innerHTML = NewBillUI()
       const billdata={
         status: "pending",
         pct: 20,
@@ -254,6 +254,7 @@ describe("Given I am a user connected as Employee", () => {
         type: "Restaurants et bars",
         fileUrl: "justificatif.jpg"
       }
+      
       jest.spyOn(mockStore, "bills")
       mockStore.bills.mockImplementationOnce(() => {
         return {
@@ -261,9 +262,9 @@ describe("Given I am a user connected as Employee", () => {
         }
       })
 
-      mockStore.bills().create(billdata)
       window.onNavigate(ROUTES_PATH.NewBill)
-      await new Promise(process.nextTick);
+      await mockStore.bills().create(billdata)
+      //await new Promise(process.nextTick);
       const message = await screen.getByText(/Erreur 404/)
 
       expect(message).toBeTruthy()
@@ -283,6 +284,6 @@ describe("Given I am a user connected as Employee", () => {
 
       expect(message).toBeTruthy()
 
-      })
+    })
   })
 })

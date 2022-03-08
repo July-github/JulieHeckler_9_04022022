@@ -241,6 +241,7 @@ describe('Given I am connected as Admin and I am on Dashboard page and I clicked
 })
 
 // test d'intégration GET
+
 describe("Given I am a user connected as Admin", () => {
   describe("When I navigate to Dashboard", () => {
     test("fetches bills from mock API GET", async () => {
@@ -251,12 +252,15 @@ describe("Given I am a user connected as Admin", () => {
       router()
       window.onNavigate(ROUTES_PATH.Dashboard)
       await waitFor(() => screen.getByText("Validations"))
+      
       const contentPending  = await screen.getByText("En attente (1)")
       expect(contentPending).toBeTruthy()
       const contentRefused  = await screen.getByText("Refusé (2)")
       expect(contentRefused).toBeTruthy()
       expect(screen.getByTestId("big-billed-icon")).toBeTruthy()
     })
+  })
+
   describe("When an error occurs on API", () => {
     beforeEach(() => {
       jest.spyOn(mockStore, "bills")
@@ -274,6 +278,7 @@ describe("Given I am a user connected as Admin", () => {
       document.body.appendChild(root)
       router()
     })
+
     test("fetches bills from an API and fails with 404 message error", async () => {
 
       mockStore.bills.mockImplementationOnce(() => {
@@ -295,7 +300,8 @@ describe("Given I am a user connected as Admin", () => {
           list : () =>  {
             return Promise.reject(new Error("Erreur 500"))
           }
-        }})
+        }
+      })
 
       window.onNavigate(ROUTES_PATH.Dashboard)
       await new Promise(process.nextTick);
@@ -303,7 +309,4 @@ describe("Given I am a user connected as Admin", () => {
       expect(message).toBeTruthy()
     })
   })
-
-  })
 })
-
