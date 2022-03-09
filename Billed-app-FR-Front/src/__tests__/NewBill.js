@@ -150,7 +150,6 @@ describe("Given I am connected as an employee", () => {
 
       const newBillPage = screen.getByText("Envoyer une note de frais")
       expect(newBillPage).toBeTruthy()
-
     })
   })
 
@@ -212,11 +211,11 @@ describe("Given I am a user connected as Employee", () => {
     root.setAttribute("id", "root")
     document.body.appendChild(root)
     router()
-
   })
 
   describe("When I navigate to NewBill page", () => {
     test("Then create new bill to mock API POST", async () => {
+      document.body.innerHTML = NewBillUI()
       const spy = jest.spyOn(mockStore, "bills")
       const billdata={
         status: "pending",
@@ -231,13 +230,15 @@ describe("Given I am a user connected as Employee", () => {
         type: "Restaurants et bars",
         fileUrl: "justificatif.jpg"
       }
+      
       mockStore.bills().create(billdata)
       
       expect(spy).toHaveBeenCalledTimes(1)
+      expect(billdata.fileUrl).toBe("justificatif.jpg")
     })
   })
-  describe("When an error occurs on API", () => {
 
+  describe("When an error occurs on API", () => {
     test("Then it fails with 404 message error", async () => {      
       jest.spyOn(mockStore, "bills")
       const rejected = mockStore.bills.mockImplementationOnce(() => {
@@ -249,8 +250,7 @@ describe("Given I am a user connected as Employee", () => {
       window.onNavigate(ROUTES_PATH.NewBill)
       await new Promise(process.nextTick);
 
-      return expect(rejected().create).rejects.toEqual(new Error("Erreur 404"))
-
+      expect(rejected().create).rejects.toEqual(new Error("Erreur 404"))
     })
     
     test("Then create new bill to an API and fails with 500 message error", async () => {
@@ -264,8 +264,7 @@ describe("Given I am a user connected as Employee", () => {
       window.onNavigate(ROUTES_PATH.NewBill)
       await new Promise(process.nextTick);
 
-      return expect(rejected().create).rejects.toEqual(new Error("Erreur 500"))
-
+      expect(rejected().create).rejects.toEqual(new Error("Erreur 500"))
     })
   })
 })

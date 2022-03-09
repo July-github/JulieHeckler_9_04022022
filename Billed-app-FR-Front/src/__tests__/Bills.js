@@ -36,7 +36,6 @@ describe("Given I am connected as an employee", () => {
     })
 
     test("Then the bills are listed", () => {
-      document.body.innerHTML = BillsUI({ data: bills })
       const trList = document.querySelectorAll("tr")
       
       expect (trList.length).not.toBeNull()
@@ -193,6 +192,7 @@ describe("Given I am a user connected as Employee", () => {
       window.onNavigate(ROUTES_PATH.Bills)
       await new Promise(process.nextTick);
       const message = await screen.getByText(/Erreur 404/)
+
       expect(message).toBeTruthy()
     })
 
@@ -207,6 +207,7 @@ describe("Given I am a user connected as Employee", () => {
       window.onNavigate(ROUTES_PATH.Bills)
       await new Promise(process.nextTick);
       const message = await screen.getByText(/Erreur 500/)
+      
       expect(message).toBeTruthy()
     })  
   })
