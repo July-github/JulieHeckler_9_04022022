@@ -131,7 +131,7 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
-  describe("When I am on NewBill Page and I do not fill the required fields", () => {
+  describe("When I am on NewBill Page, I click on submit button and I do not fill the required fields", () => {
     test("Then I should stay on the NewBill page", () => {
 
       const inputDate = screen.getByTestId("datepicker")

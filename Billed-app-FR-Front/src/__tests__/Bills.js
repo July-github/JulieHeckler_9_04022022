@@ -31,7 +31,6 @@ describe("Given I am connected as an employee", () => {
       await waitFor(() => screen.getByTestId('icon-window'))
       const windowIcon = screen.getByTestId('icon-window')
 
-      //to-do write expect expression
       expect(windowIcon).toHaveClass('active-icon')
     })
 
@@ -207,7 +206,7 @@ describe("Given I am a user connected as Employee", () => {
       window.onNavigate(ROUTES_PATH.Bills)
       await new Promise(process.nextTick);
       const message = await screen.getByText(/Erreur 500/)
-      
+
       expect(message).toBeTruthy()
     })  
   })
